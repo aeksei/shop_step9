@@ -6,7 +6,8 @@
 
 <a id="shop-ref" hidden="true" href="{% url 'shop' %}"></a>
 <script defer src="{% static 'shop/js/build/shop.js' %}"></script>
-<!--<script defer src="{% static 'shop/js/build/bundle.js' %}"></script>-->
+<!--<script defer src="{% static 'shop/js/build/button.js' %}"></script>-->
+<script defer src="{% static 'shop/js/build/bundle.js' %}"></script>
     <div class="hero-wrap hero-bread" style="background-image: url(/static/shop/images/bg_1.jpg);">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
@@ -40,32 +41,9 @@
 
     		<div class="row mt-5">
 
-        {% if products.paginator.num_pages > 1 %}
-        <div class="col text-center">
-            <div class="block-27">
-              <ul>
-                {% if products.has_previous %}
-                <li><a href="{% url 'shop' %}{{ products.previous_page_number }}">&lt;</a></li>
-                {% endif %}
+            <div id="button-list">
 
-
-                {% for _ in products.num_pages_tuple %}
-
-                {% if forloop.counter != products.number %}
-                    <li><a id="shop_list_{{forloop.counter}}" href="{% url 'shop' %}{{ forloop.counter }}">{{forloop.counter}}</a></li>
-                {% else %}
-                    <li id="shop_list_{{forloop.counter}}" class="active"><span>{{forloop.counter}}</span></li>
-                {% endif %}
-
-                {% endfor %}
-
-                {% if products.has_next %}
-                <li><a href="{% url 'shop' %}{{ products.next_page_number }}">&gt;</a></li>
-                {% endif %}
-              </ul>
             </div>
-          </div>
-        {% endif %}
 
 
         </div>

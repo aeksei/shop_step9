@@ -14,6 +14,7 @@ import os
 import mimetypes
 
 mimetypes.add_type('text/css', '.css')
+# mimetypes.add_type('text/html', '.html', True)
 mimetypes.add_type('application/javascript', '.js')
 mimetypes.add_type('image/svg+xml', '.svg')
 
@@ -136,4 +137,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
