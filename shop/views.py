@@ -3,6 +3,9 @@ from django.urls import reverse
 from django.views.generic import View
 from .settings.base import *
 from django.core.paginator import Paginator
+from .models import *
+
+import json
 
 # Create your views here.
 
@@ -61,18 +64,23 @@ class ShopView(View):
                     {'name':       'Chilli',
                      'image':      'shop/images/product-12.jpg',
                      'price':      '$120.00'}]
-                   
-        paginator = Paginator(products_list, 3)
-        
-        try:
-            products = paginator.page(page_id)
-            products.num_pages_tuple = tuple(range(paginator.num_pages))
-        except:
-            return redirect(reverse('shop'))
-            
-        return render(request, 'shop/shop.html', {'products': products, 'phone_number': PHONE_NUMBER})
-        
-        
+
+
+        if not request.is_ajax():
+            paginator = Paginator(products_list, 3)
+
+            try:
+                products = paginator.page(page_id)
+                products.num_pages_tuple = tuple(range(paginator.num_pages))
+            except:
+                return redirect(reverse('shop'))
+            print("########")
+            return render(request, 'shop/shop.html', {'products': products, 'phone_number': PHONE_NUMBER})
+        else:
+            # # print(json.dumps({'food': food}))
+            # food = list(Products.objects.values())
+            return HttpResponse(json.dumps({'products_list': products_list}), content_type='application/json')
+
         
 from django.http import HttpResponse
         
@@ -80,19 +88,54 @@ wishlist_count = 0
 
 class WishlistView(View):
    
-    def get(self, request):    
-        return render(request, 'shop/wishlist.html', {'phone_number': PHONE_NUMBER})
+    #def get(self, request):
+   #     return render(request, 'shop/wishlist.html', {'phone_number': PHONE_NUMBER})
         
-    def post(self, request):
-        global wishlist_count
-        if request.is_ajax():
-            message = f'WishlistView: {wishlist_count}'
-            wishlist_count += 1
-            print(message)        
+    def get(self, request):
+        # global wishlist_count
+        # if request.is_ajax():
+        #     message = f'WishlistView: {wishlist_count}'
+        #     wishlist_count += 1
+        #     print(message)
+        # else:
+        #     message = 'Not AJAX request'
+
+        # food = [
+        #     {'title': '!!!! Bell Pepper',
+        #      'img': 'images/product-1.jpg',
+        #      'description': 'Far far away, behind the word mountains, far from the countries',
+        #      'currency': '$',
+        #      'price': 80.00,
+        #      'quantity': 1,
+        #      'total_price': 80.00
+        #      },
+        #     {'title': 'Stawberry',
+        #      'img': 'images/product-2.jpg',
+        #      'description': 'Far far away, behind the word mountains, far from the countries',
+        #      'currency': '$',
+        #      'price': 120.00,
+        #      'quantity': 1,
+        #      'total_price': 120.00
+        #      },
+        #     {'title': 'Green beans',
+        #      'img': 'images/product-3.jpg',
+        #      'description': 'Far far away, behind the word mountains, far from the countries',
+        #      'currency': '$',
+        #      'price': 20.00,
+        #      'quantity': 1,
+        #      'total_price': 20.00
+        #      },
+        # ]
+
+        if not request.is_ajax():
+            print("########")
+            return render(request, 'shop/wishlist.html', {'phone_number': PHONE_NUMBER})
         else:
-            message = 'Not AJAX request'
-            
-        return HttpResponse(message)
+            # print(json.dumps({'food': food}))
+            food = list(Products.objects.values())
+            print("food")
+            return HttpResponse(json.dumps({'food': food}), content_type='application/json')
+
         
         
         
